@@ -21,7 +21,7 @@ class NewTabBarViewController: UITabBarController, TabControllerProtocol {
     public var tabBarContainer: UIView!
     public var shouldHideStatusBar: Bool = false
     
-    public lazy var playerViewController: MiniPlayerProtocol! = DemoViewController()
+    public lazy var playerViewController: MiniPlayerProtocol! = DemoChildViewController()
     //factory.createAddItemsViewController()
     
     let homeViewController = HomeViewController()
@@ -106,4 +106,32 @@ extension NewTabBarViewController {
             break
         }
     }
+}
+
+extension NewTabBarViewController: HomeViewControllerProtocol {
+    
+    func shouldAddChildViewController(parent: UIViewController) {
+        parent.add(playerViewController, animated: false)
+    }
+    
+    func shouldRemoveChildViewController(parent: UIViewController) {
+        parent.remove(playerViewController, animated: true)
+    }
+}
+
+class DemoChildViewController: UIViewController, MiniPlayerProtocol {
+    
+    var closeButton: UIButton! = UIButton()
+    
+    var titleView: UILabel = UILabel()
+    
+    var addItemsMainView: UIView!
+    
+    var hiddenRootView: UIView! = UIView()
+    
+    lazy var miniPlayerView: UIView! = {
+        let view = UIView()
+        view.backgroundColor = .systemPink
+        return view
+    }()
 }
