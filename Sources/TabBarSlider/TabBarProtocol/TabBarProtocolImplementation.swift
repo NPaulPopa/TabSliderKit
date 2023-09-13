@@ -28,7 +28,7 @@ extension TabControllerProtocol {
         
         playerViewController.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: additionalBottomInset, right: 0)
 
-      //  coordinator = TransitionCoordinator(tabBarViewController: self, playerViewController: playerViewController)
+        coordinator = TransitionManager(tabBarViewController: self, playerViewController: playerViewController)
     }
     
     func constrainCustomTabBar() {
