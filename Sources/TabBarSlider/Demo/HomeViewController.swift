@@ -59,7 +59,27 @@ class HomeViewController: ProgrammaticViewController, FloatingButtonViewControll
         view.setNeedsLayout()
     }
     
+    private func removeMiniPlayer() {
+        delegate?.shouldRemoveChildViewController(parent: self)
+    }
+    
+    private func addMiniPlayer() {
+        delegate?.shouldAddChildViewController(parent: self)
+    }
+    
+    private func subscribeToNotificationCenterPublisher() {
+        
+        NotificationCenter.default.publisher(for: .miniPlayerCloseButtonTapped)
+            .sink { [weak self] _ in
+                self?.removeMiniPlayer()
+            }.store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .addItemsFloatingButtonTapped)
+            .sink { [weak self] _ in
+                self?.addMiniPlayer()
 
+            }.store(in: &cancellables)
+    }
 }
 
 
