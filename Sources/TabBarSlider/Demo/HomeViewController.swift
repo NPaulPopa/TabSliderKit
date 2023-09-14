@@ -80,6 +80,33 @@ class HomeViewController: ProgrammaticViewController, FloatingButtonViewControll
 
             }.store(in: &cancellables)
     }
+    
+    private func subscribeToTransitionPublisher() {
+                
+        NotificationCenter.default.publisher(for: .didChangeSheetState)
+            .compactMap { $0.object as? SheetState }
+            .sink { [weak self] state in
+                                
+                guard let self = self else { return }
+                
+                switch state {
+                case .open:
+
+                    UIView.animate(withDuration: 1.0, delay: 0, options: .curveEaseInOut) {
+
+                        self.navigationController?.navigationBar.alpha = 0
+                        self.navigationController?.navigationBar.isHidden = true
+                        self.navigationController!.view.setNeedsLayout()
+                    }
+                case .closed:
+                    UIView.animate(withDuration: 1.0, delay: 0, options: .curveEaseInOut) {
+                        self.navigationController?.navigationBar.alpha = 1
+                        self.navigationController?.navigationBar.isHidden = false
+                    }
+                }
+                
+            }.store(in: &cancellables)
+    }
 }
 
 
