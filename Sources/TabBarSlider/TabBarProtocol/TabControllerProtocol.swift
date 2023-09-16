@@ -26,7 +26,7 @@ import UIKit
 ///     }
 /// }
 /// ```
-protocol TabControllerProtocol: UITabBarController  {
+public protocol TabControllerProtocol: UITabBarController  {
     
     var tabBar: UITabBar { get }
     var customTabBar: UITabBar! { get set }

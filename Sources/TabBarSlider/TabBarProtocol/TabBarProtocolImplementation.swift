@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension TabControllerProtocol {
+public extension TabControllerProtocol {
     
     func setupTabBar() {
         
