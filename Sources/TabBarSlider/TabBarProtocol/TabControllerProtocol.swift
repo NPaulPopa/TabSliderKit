@@ -30,10 +30,9 @@ public protocol TabControllerProtocol: UITabBarController  {
     
     var tabBar: UITabBar { get }
     var customTabBar: UITabBar! { get set }
+    var screenSize: CGFloat { get }
     var tabBarContainer: UIView! { get set }
     var shouldHideStatusBar: Bool { get set }
-    var playerViewController: MiniPlayerProtocol! { get set }
-    var coordinator: TransitionManager! { get set }
     
     ///Call this method inside `viewDidLoad()` to ensure that customTabBar has been properly constrained
     func setupTabBar()
