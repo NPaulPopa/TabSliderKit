@@ -33,15 +33,9 @@ public protocol TabControllerProtocol: UITabBarController  {
     var screenSize: CGFloat { get }
     var tabBarContainer: UIView! { get set }
     var shouldHideStatusBar: Bool { get set }
-    
-    //  var playerViewController: MiniPlayerProtocol! { get set }
-     // var coordinator: TransitionManager! { get set }
-    
+        
     ///Call this method inside `viewDidLoad()` to ensure that customTabBar has been properly constrained
     func setupTabBar()
-    
-    ///Call this method inside`viewDidAppear(_:)` to ensure that customTabBar has been given a frame
-    func setupTransitionCoordinator()
     
     ///Override this method to provide a custom appearance for the TabBarController's customTabBar
     /// - Default value of customTabBar's appearance is set to: .systemChromeMaterial
