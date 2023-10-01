@@ -8,12 +8,12 @@
 import Foundation
 import UIKit
 
-public protocol ParentControllerProtocol {
+public protocol ParentControllerProtocol: AnyObject {
     
     var screenSize: CGFloat { get }
     var transitionManager: TransitionManager! { get set }
     
-    mutating func setupTransitionCoordinator(playerViewController: MiniPlayerProtocol)
+    func setupTransitionCoordinator(playerViewController: MiniPlayerProtocol)
 }
 
 public extension ParentControllerProtocol {
@@ -22,7 +22,7 @@ public extension ParentControllerProtocol {
         UIScreen.main.bounds.height
     }
     
-    mutating func setupTransitionCoordinator(playerViewController: MiniPlayerProtocol) {
+    func setupTransitionCoordinator(playerViewController: MiniPlayerProtocol) {
 
         let noSafeAreaDevice = screenSize < 670
         let bottomInset: CGFloat = noSafeAreaDevice ? 62 : 27
