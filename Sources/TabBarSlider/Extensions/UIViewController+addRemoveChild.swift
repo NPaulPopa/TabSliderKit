@@ -9,7 +9,7 @@ import UIKit
 
 extension UIViewController {
     
-    public func add(_ child: UIViewController, animated: Bool = false) {
+    public func add(_ child: UIViewController, animated: Bool = false, completion: (()-> Void)? = nil) {
         
         addChild(child)
         view.addSubview(child.view)
@@ -27,14 +27,17 @@ extension UIViewController {
         if animated {
             child.view.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
             
-            UIView.animate(withDuration: 1.5) {
+            UIView.animate(withDuration: 0.5) {
                 child.view.transform = .identity // Slide the child view up
             }
         }
         child.didMove(toParent: self)
+        
+        (completion ?? {})()
     }
 
-    public func remove(_ child: UIViewController, animated: Bool) {
+    public func remove(
+    _ child: UIViewController, animated: Bool, completion: (()->Void)? = nil) {
         guard child.parent != nil else {
             return
         }
@@ -53,6 +56,8 @@ extension UIViewController {
              child.willMove(toParent: nil)
              child.view.removeFromSuperview()
              child.removeFromParent()
+             
+             completion!()
          }
    }
 }
