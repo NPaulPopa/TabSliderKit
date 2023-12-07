@@ -50,3 +50,112 @@ public class TransitionManager: NSObject {
         subscribeToNotificationCenterPublisher()
     }
 }
+
+
+// MARK: Tap and Pan gestures handling
+extension TransitionManager {
+
+    @objc private func didPanPlayer(recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            let translationY = recognizer.translation(in: playerViewController.view).y
+            
+            if !(translationY > 0 && state == .closed) {
+                startInteractiveTransition(for: !state)
+            }
+
+        case .changed:
+            
+            let translation = recognizer.translation(in: recognizer.view!)
+            
+            if !(state == .closed && translation.y < 0) {
+                updateInteractiveTransition(distanceTraveled: translation.y)
+            }
+
+        case .ended:
+            let velocity = recognizer.velocity(in: recognizer.view!).y
+            
+            
+            let isCancelled = isGestureCancelled(with: velocity)
+            let translation = recognizer.translation(in: recognizer.view).y
+            
+            continueInteractiveTransition(cancel: isCancelled)
+            
+            if translation < 0 && !isCancelled && state == .open {
+                NotificationCenter.default.post(name: .didChangeSheetState, object: state)
+            }
+            
+            guard translation > 0 && !isCancelled else { return }
+            
+            NotificationCenter.default.post(name: .didChangeSheetState, object: state)
+            //MARK: Baselined and tested
+            playerViewController.miniPlayerView.invalidateIntrinsicContentSize()
+
+        case .cancelled:
+            
+            continueInteractiveTransition(cancel: true)
+
+        case .failed:
+            continueInteractiveTransition(cancel: true)
+        default:
+            break
+        }
+    }
+
+    @objc private func didTapPlayer(recognizer: UITapGestureRecognizer) {
+        animateTransition(for: !state)
+        if state == .closed {
+           
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) { [weak self] in
+                guard let self = self else { return }
+            }
+            NotificationCenter.default.post(name: .didChangeSheetState, object: state)
+        } else {
+            NotificationCenter.default.post(name: .didChangeSheetState, object: state)
+        }
+    }
+
+    // Starts transition and pauses on pan .begin
+    private func startInteractiveTransition(for state: SheetState) {
+        animateTransition(for: state)
+        runningAnimators.pauseAnimations()
+    }
+
+    // Scrubs transition on pan .changed
+    private func updateInteractiveTransition(distanceTraveled: CGFloat) {
+        var fraction = distanceTraveled / totalAnimationDistance
+        if state == .open { fraction *= -1 }
+        runningAnimators.fractionComplete = fraction
+    }
+
+    // Continues or reverse transition on pan .ended
+    private func continueInteractiveTransition(cancel: Bool) {
+        if cancel {
+            runningAnimators.reverse()
+            state = !state
+        }
+
+        runningAnimators.continueAnimations()
+    }
+
+    // Perform all animations with animators
+    private func animateTransition(for newState: SheetState) {
+        state = newState
+        runningAnimators = createTransitionAnimators(with: TransitionManager.animationDuration)
+        runningAnimators.startAnimations()
+    }
+    
+    private func animateCloseTransition(for newState: SheetState) {
+        state = newState
+        runningAnimators = createCloseTransitionAnimators(with: TransitionManager.animationDuration)
+        runningAnimators.startAnimations()
+    }
+
+    // Check if gesture is cancelled (reversed)
+    private func isGestureCancelled(with velocity: CGFloat) -> Bool {
+        guard velocity != 0 else { return false }
+
+        let isPanningDown = velocity > 0
+        return (state == .open && isPanningDown) || (state == .closed && !isPanningDown)
+    }
+}
