@@ -10,11 +10,39 @@ import UIKit
 import Combine
 import FloatingButton
 
+class SlidingTabViewController: UITabBarController, TabControllerProtocol {
+    
+    func setupTransitionCoordinator() {}
+    
+    var customTabBar: UITabBar!
+    
+    var tabBarContainer: UIView!
+    
+    var shouldHideStatusBar: Bool = false
+    
+    var playerViewController: MiniPlayerProtocol!
+    
+    var coordinator: TransitionManager!
+    
+    //MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupTabBar()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+}
+
 class NewTabBarViewController: UITabBarController, TabControllerProtocol {
+    func setupTransitionCoordinator() {
+        
+    }
+    
     
     //MARK: - Properties
-    
-//    let factory = AddItemsFactory()
     
     public var coordinator: TransitionManager!
     public var customTabBar: UITabBar!
@@ -22,7 +50,6 @@ class NewTabBarViewController: UITabBarController, TabControllerProtocol {
     public var shouldHideStatusBar: Bool = false
     
     public lazy var playerViewController: MiniPlayerProtocol! = DemoChildViewController()
-    //factory.createAddItemsViewController()
     
     let homeViewController = HomeViewController()
     
@@ -40,7 +67,6 @@ class NewTabBarViewController: UITabBarController, TabControllerProtocol {
         setupTabBar()
         setupTabs()
         
-        homeViewController.delegate = self
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -119,17 +145,26 @@ extension NewTabBarViewController: HomeViewControllerProtocol {
     }
 }
 
-class DemoChildViewController: UIViewController, MiniPlayerProtocol {
+public class DemoChildViewController: UIViewController, MiniPlayerProtocol {
     
-    var closeButton: UIButton! = UIButton()
+    public init() {
+        super.init(nibName: nil, bundle: nil)
+        view.backgroundColor = .green
+    }
     
-    var titleView: UILabel = UILabel()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    var addItemsMainView: UIView!
+    public var closeButton: UIButton! = UIButton()
     
-    var hiddenRootView: UIView! = UIView()
+    public var titleView: UILabel = UILabel()
     
-    lazy var miniPlayerView: UIView! = {
+    public var addItemsMainView: UIView!
+    
+    public var hiddenRootView: UIView! = UIView()
+    
+    lazy public var miniPlayerView: UIView! = {
         let view = UIView()
         view.backgroundColor = .systemPink
         return view
