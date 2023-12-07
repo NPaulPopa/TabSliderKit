@@ -159,3 +159,35 @@ extension TransitionManager {
         return (state == .open && isPanningDown) || (state == .closed && !isPanningDown)
     }
 }
+
+//MARK: - GestureRecognizer Delegate
+
+extension TransitionManager: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let tapGestureRecognizer = gestureRecognizer as? UITapGestureRecognizer else { return runningAnimators.isEmpty }
+
+        guard let miniPlayerView = playerViewController.miniPlayerView,
+            let closeButton = playerViewController.closeButton,
+            let view = playerViewController.view else { return false }
+
+        let tapLocation = tapGestureRecognizer.location(in: view)
+        let closeButtonFrame = closeButton.convert(closeButton.frame, to: view).insetBy(dx: -8, dy: -8)
+        
+        return runningAnimators.isEmpty && (miniPlayerView.frame.contains(tapLocation) || closeButtonFrame.contains(tapLocation))
+    }
+
+    private func createPanGestureRecognizer() -> UIPanGestureRecognizer {
+        let recognizer = UIPanGestureRecognizer()
+        recognizer.addTarget(self, action: #selector(didPanPlayer(recognizer:)))
+        recognizer.delegate = self
+        return recognizer
+    }
+
+    private func createTapGestureRecognizer() -> UITapGestureRecognizer {
+        let recognizer = UITapGestureRecognizer()
+        recognizer.addTarget(self, action: #selector(didTapPlayer(recognizer:)))
+        recognizer.delegate = self
+        return recognizer
+    }
+
+}
