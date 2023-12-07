@@ -57,7 +57,7 @@ extension UIViewController {
              child.view.removeFromSuperview()
              child.removeFromParent()
              
-             completion!()
+             completion?()
          }
    }
 }
