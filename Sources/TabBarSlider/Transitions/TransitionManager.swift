@@ -259,4 +259,14 @@ extension TransitionManager {
         animator.scrubsLinearly = false
         return animator
     }
+
+    private func fadeOutMiniPlayerAnimator(with duration: TimeInterval) -> UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut)
+        addKeyframeAnimation(to: animator, withRelativeStartTime: 0.16, relativeDuration: 0.5) {
+            self.updateMiniPlayer(with: self.state)
+        }
+        animator.scrubsLinearly = false
+        return animator
+    }
+
 }
