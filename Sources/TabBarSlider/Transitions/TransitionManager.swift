@@ -251,4 +251,12 @@ extension TransitionManager {
         return animator
     }
     
+    private func fadeInMiniPlayerAnimator(with duration: TimeInterval) -> UIViewPropertyAnimator { // no issues here
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .easeIn)
+        addKeyframeAnimation(to: animator, withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+            self.updateMiniPlayer(with: self.state)
+        }
+        animator.scrubsLinearly = false
+        return animator
+    }
 }
