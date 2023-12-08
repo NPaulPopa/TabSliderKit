@@ -269,4 +269,12 @@ extension TransitionManager {
         return animator
     }
 
+    private func closePlayerAnimator(with duration: TimeInterval) ->  UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: duration, dampingRatio: 0.9)
+        addAnimation(to: animator, animations: {
+            self.updatePlayerContainer(with: self.state)
+            self.updateTabBar(with: self.state)
+        })
+        return animator
+    }
 }
