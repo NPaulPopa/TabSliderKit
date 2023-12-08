@@ -212,4 +212,22 @@ extension TransitionManager {
             ]
         }
     }
+    
+    private func createCloseTransitionAnimators(with duration: TimeInterval) ->
+    [UIViewPropertyAnimator] {
+        switch state {
+        case .open:
+            return [
+                openPlayerAnimator(with: duration),
+                fadeInPlayerAnimator(with: duration),
+                fadeOutMiniPlayerAnimator(with: duration)
+            ]
+        case .closed:
+            return [
+                closePlayerAnimator(with: duration),
+                fadeOutAndClosePlayerAnimator(with: duration),
+                fadeInMiniPlayerAnimator(with: duration),
+            ]
+        }
+    }
 }
