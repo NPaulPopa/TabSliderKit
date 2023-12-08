@@ -189,5 +189,27 @@ extension TransitionManager: UIGestureRecognizerDelegate {
         recognizer.delegate = self
         return recognizer
     }
+}
 
+// MARK: Animators
+extension TransitionManager {
+
+    private static let animationDuration = TimeInterval(0.7)
+
+    private func createTransitionAnimators(with duration: TimeInterval) -> [UIViewPropertyAnimator] {
+        switch state {
+        case .open:
+            return [
+                openPlayerAnimator(with: duration),
+                fadeInPlayerAnimator(with: duration),
+                fadeOutMiniPlayerAnimator(with: duration)
+            ]
+        case .closed:
+            return [
+                closePlayerAnimator(with: duration),
+                fadeOutPlayerAnimator(with: duration),
+                fadeInMiniPlayerAnimator(with: duration),
+            ]
+        }
+    }
 }
