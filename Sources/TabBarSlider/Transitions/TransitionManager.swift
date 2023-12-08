@@ -239,4 +239,16 @@ extension TransitionManager {
         })
         return animator
     }
+    
+    private func fadeInPlayerAnimator(with duration: TimeInterval) -> UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .easeIn)
+        addKeyframeAnimation(to: animator, withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+            self.updateTitleView(with: self.state)
+
+            self.updatePlayer(with: self.state)
+        }
+        animator.scrubsLinearly = false
+        return animator
+    }
+    
 }
