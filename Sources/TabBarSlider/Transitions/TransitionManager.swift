@@ -326,3 +326,85 @@ extension TransitionManager {
     }
 }
 
+
+// MARK: UI state rendering
+extension TransitionManager {
+
+    private func updateUI(with state: SheetState) {
+        updatePlayer(with: state)
+        updateTitleView(with: state)
+        
+        updateMiniPlayer(with: state)
+        updatePlayerContainer(with: state)
+        updateTabBar(with: state)
+    }
+    
+    private func updateMiniPlayer(with state: SheetState) {
+        self.playerViewController?.miniPlayerView.alpha = state == .open ? 0 : 1
+    }
+    
+    //MARK: - TabBar is mentioned here -start-
+
+    private func updateTabBar(with state: SheetState) {
+        
+        NotificationCenter.default.post(name: .updateTabBarTransform, object: state)
+        NotificationCenter.default.post(name: .shouldHideStatusBar, object: state)
+    }
+
+    private func updatePlayer(with state: SheetState) {
+        guard let playerViewController = playerViewController else { return }
+            //    , let tabBarViewController = tabBarController
+       
+
+        playerViewController.hiddenRootView.alpha = state == .open ? 1 : 0
+
+        playerViewController.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        
+      //  let cornerRadius: CGFloat = playerViewController.view.safeAreaInsets.bottom > tabBarViewController.tabBar.bounds.height ? 20 : 0
+        
+        //TODO: - consider removing corner radius and set a default value
+      //  playerViewController.view.layer.cornerRadius = state == .open ? cornerRadius : 0
+    }
+    
+    private func updateTitleView(with state: SheetState) {
+        guard let playerViewController = playerViewController else { return }
+                
+        UIView.animate(withDuration: 0.5) {
+            playerViewController.titleView.alpha = state == .open ? 1 : 0
+            playerViewController.closeButton.alpha = state == .open ? 1 : 0
+        }
+    }
+    
+    private func removeMiniPlayer() {
+        
+        guard playerViewController.parent != nil else { return }
+        UIView.animate(withDuration: 0.5, animations: {
+            self.playerViewController.view.alpha = 0
+            
+        }) { _ in
+            self.playerViewController.willMove(toParent: nil)
+            self.playerViewController.view.removeFromSuperview()
+            self.playerViewController.removeFromParent()
+        }
+    }
+    
+    private func subscribeToNotificationCenterPublisher() {
+        
+        NotificationCenter.default.publisher(for: .closeAndRemoveController)
+            .sink { [weak self] _ in
+                
+                #warning("Change notification name to `closeAndRemoveController` inside AddItems module")
+                
+                guard let self = self else { return }
+
+                self.animateCloseTransition(for: !self.state)
+                
+            }.store(in: &cancellables)
+    }
+    
+    //MARK: - TabBar is mentioned here -end-
+
+    private func updatePlayerContainer(with state: SheetState) {
+        playerViewController?.view.transform = state == .open ? .identity : CGAffineTransform(translationX: 0, y: totalAnimationDistance)
+    }
+}
