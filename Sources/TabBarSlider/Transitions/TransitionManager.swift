@@ -277,4 +277,52 @@ extension TransitionManager {
         })
         return animator
     }
+
+    private func fadeOutPlayerAnimator(with duration: TimeInterval) -> UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut)
+        addKeyframeAnimation(to: animator, withRelativeStartTime: 0.5, relativeDuration: 0.5) {
+            self.updateTitleView(with: self.state)
+            self.updatePlayer(with: self.state)
+        }
+        animator.scrubsLinearly = false
+        return animator
+    }
+    
+    private func fadeOutAndClosePlayerAnimator(with duration: TimeInterval) -> UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut)
+        addKeyframeAnimation(to: animator, withRelativeStartTime: 0.5, relativeDuration: 0.5) {
+            self.updateTitleView(with: self.state)
+            self.updatePlayer(with: self.state)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration * 0.5) {
+                self.removeMiniPlayer()
+            }
+        }
+        animator.scrubsLinearly = false
+        return animator
+    }
+
+
+    private func addAnimation(to animator: UIViewPropertyAnimator, animations: @escaping () -> Void) {
+        animator.addAnimations { animations() }
+        animator.addCompletion({ _ in
+            animations()
+            self.runningAnimators.remove(animator)
+        })
+    }
+
+    private func addKeyframeAnimation(to animator: UIViewPropertyAnimator, withRelativeStartTime frameStartTime: Double = 0.0, relativeDuration frameDuration: Double = 1.0, animations: @escaping () -> Void) {
+        animator.addAnimations {
+            UIView.animateKeyframes(withDuration: 0, delay: 0, options:[], animations: {
+                UIView.addKeyframe(withRelativeStartTime: frameStartTime, relativeDuration: frameDuration) {
+                    animations()
+                }
+            })
+        }
+        animator.addCompletion({ _ in
+            animations()
+            self.runningAnimators.remove(animator)
+        })
+    }
 }
+
