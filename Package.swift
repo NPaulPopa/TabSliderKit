@@ -9,9 +9,19 @@ let package = Package(
     products: [
         .library(name: "TabBarSlider", targets: ["TabBarSlider"]),
     ],
-    dependencies: [ ],
+    dependencies: [
+        .package(name: "MiniItemBasket", path: "../MiniItemBasket"),
+        .package(name: "FloatingButton", path: "../FloatingButton"),
+        .package(name: "Extensions", path: "../Extensions"),
+
+    ],
     targets: [
-        .target(name: "TabBarSlider",dependencies: []),
+        .target(name: "TabBarSlider",dependencies: [
+        
+            .productItem(name: "MiniItemBasket", package: "MiniItemBasket", condition: nil),
+            .productItem(name: "FloatingButton", package: "FloatingButton", condition: nil),
+            .productItem(name: "Extensions", package: "Extensions", condition: nil),
+        ]),
         
         .testTarget(name: "TabBarSliderTests",dependencies: ["TabBarSlider"]),
     ]
