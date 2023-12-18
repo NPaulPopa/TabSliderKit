@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "FloatingButton",
+        "repositoryURL": "https://github.com/NPaulPopa/FloatingButton.git",
+        "state": {
+          "branch": "main",
+          "revision": "9fb7d8b7f99b3dcb0a526d3ea9d81b48f1c3f6d6",
+          "version": null
+        }
+      },
+      {
+        "package": "Themes",
+        "repositoryURL": "https://github.com/NPaulPopa/ItemsThemes.git",
+        "state": {
+          "branch": "main",
+          "revision": "8180286ba91eefbcadacb4f3b9acae659033d2dc",
+          "version": null
+        }
+      },
+      {
+        "package": "MiniItemBasket",
+        "repositoryURL": "https://github.com/NPaulPopa/MiniItemBasket.git",
+        "state": {
+          "branch": "main",
+          "revision": "31080e82aaa13b3d6e81974c43702bd23966b84d",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

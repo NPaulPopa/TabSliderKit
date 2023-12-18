@@ -10,8 +10,11 @@ let package = Package(
         .library(name: "TabBarSlider", targets: ["TabBarSlider"]),
     ],
     dependencies: [
-        .package(name: "MiniItemBasket", path: "../MiniItemBasket"),
-        .package(name: "FloatingButton", path: "../FloatingButton"),
+        
+        .package(url: "https://github.com/NPaulPopa/MiniItemBasket.git", branch: "main"),
+        
+        .package(url: "https://github.com/NPaulPopa/FloatingButton.git", branch: "main"),
+        
         .package(name: "Extensions", path: "../Extensions"),
 
     ],
