@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import Extensions
 import MiniItemBasket
 import FloatingButton
 
@@ -17,7 +16,7 @@ protocol HomeViewControllerProtocol: AnyObject {
     func shouldRemoveChildViewController(parent: UIViewController)
 }
 
-class HomeViewController: ProgrammaticViewController, FloatingButtonViewControllerProtocol {
+class HomeViewController: UIViewController, FloatingButtonViewControllerProtocol {
     
     weak var delegate: HomeViewControllerProtocol?
                 
@@ -34,19 +33,27 @@ class HomeViewController: ProgrammaticViewController, FloatingButtonViewControll
         
     init(){
         super.init(nibName: nil, bundle: nil)
+        configure()
+        constrain()
         setupFloatingButton()
     }
     
-    override func configure() {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    private func configure() {
         title = "Home"
                 
         subscribeToTransitionPublisher()
         subscribeToNotificationCenterPublisher()
     }
     
-    override func constrain() {
+    private func constrain() {
 
-        addConstrainedSubview(floatingTableView)
+        self.view.addSubview(floatingTableView)
+        floatingTableView.translatesAutoresizingMaskIntoConstraints = false
         pinToBounds(parent: view, subview: floatingTableView)
 
         //TODO: - Include the lines below inside HomeCollectionViewController

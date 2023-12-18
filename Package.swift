@@ -15,15 +15,12 @@ let package = Package(
         
         .package(url: "https://github.com/NPaulPopa/FloatingButton.git", branch: "main"),
         
-        .package(name: "Extensions", path: "../Extensions"),
-
     ],
     targets: [
         .target(name: "TabBarSlider",dependencies: [
         
             .productItem(name: "MiniItemBasket", package: "MiniItemBasket", condition: nil),
             .productItem(name: "FloatingButton", package: "FloatingButton", condition: nil),
-            .productItem(name: "Extensions", package: "Extensions", condition: nil),
         ]),
         
         .testTarget(name: "TabBarSliderTests",dependencies: ["TabBarSlider"]),
